@@ -9,7 +9,7 @@ public class ChessBoardWithColumnsAndRows {
     private JButton[][] chessBoardSquares = new JButton[10][10];
     private JPanel chessBoard;
     private final JLabel message = new JLabel(
-            "Chess Champ is ready to play!");
+            "!");
 
 
     ChessBoardWithColumnsAndRows() {
@@ -42,8 +42,7 @@ public class ChessBoardWithColumnsAndRows {
             for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                 JButton b = new JButton();
                 b.setMargin(buttonMargin);
-                // our chess pieces are 64x64 px in size, so we'll
-                // 'fill this in' using a transparent icon..
+                
 
 
                 if ((jj % 2 == 0 && ii % 2 == 0)
@@ -90,8 +89,7 @@ public class ChessBoardWithColumnsAndRows {
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
 
-                // ensures the frame is the minimum size it needs to be
-                // in order display the components within it
+                
                 f.pack();
                 // ensures the minimum size is enforced.
                 f.setMinimumSize(f.getSize());
