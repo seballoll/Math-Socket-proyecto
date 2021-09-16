@@ -15,6 +15,9 @@ public class Server_Socket {
         System.out.println("server online");//notifica al activar el socket del servidor
         s = ss.accept();
         System.out.println("client conected");//notifica cuando un cliente se conecta
+        InputStreamReader RD = new InputStreamReader(s.getInputStream());
+        BufferedReader BFRD = new BufferedReader(RD);
+        PrintWriter WRT = new PrintWriter(s.getOutputStream());
 
         try {
 
