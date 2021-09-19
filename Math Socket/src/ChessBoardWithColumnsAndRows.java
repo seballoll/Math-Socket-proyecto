@@ -35,25 +35,25 @@ public class ChessBoardWithColumnsAndRows {
         chessBoard = new JPanel(new GridLayout(4, 4));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
         gui.add(chessBoard);
+        random_list Lista_De_Cuadros = new random_list();
+        Nodo current = Lista_De_Cuadros.setLista().head;
 
         // create the chess board squares
         Insets buttonMargin = new Insets(100,50,0,23);//manage size
-        for (int ii = 0; ii < chessBoardSquares.length; ii++) {
-            for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
-                JButton b = new JButton();
+        for (int ii = 0; ii < 4; ii++) {
+            for (int jj = 0; jj < 4; jj++) {
+                JButton b = new JButton(current.tipo);
                 b.setMargin(buttonMargin);
-                
 
 
-                if ((jj % 2 == 0 && ii % 2 == 0)
-                        //)\\ {
-                        || (jj % 2 == 1 && ii % 2 == 1)) {
-                    b.setBackground(Color.WHITE);
-                } else {
-                    b.setBackground(Color.BLACK);
-                }
+                b.setBackground(Color.WHITE);
+
                 chessBoardSquares[jj][ii] = b;
+
+                current = current.next;
+
             }
+
         }
 
 
