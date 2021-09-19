@@ -5,8 +5,9 @@ public class Server_Socket {
 
     static ServerSocket ss;
     static Socket s ;
+    static String host_user;
 
-    public static void main(String[] args) throws IOException {
+    public static void main() throws IOException {
 
         //declaraciones para la coneccion del servidor y el cliente
 
@@ -18,6 +19,10 @@ public class Server_Socket {
         InputStreamReader RD = new InputStreamReader(s.getInputStream());
         BufferedReader BFRD = new BufferedReader(RD);
         PrintWriter WRT = new PrintWriter(s.getOutputStream());
+        String client_user =  BFRD.readLine();
+        System.out.println(client_user);
+        WRT.println(host_user);
+        WRT.flush();
 
         try {
 
@@ -29,6 +34,9 @@ public class Server_Socket {
         }
 
 
+    }
+    public static void setName(String name){
+        host_user = name;
     }
     }
 
