@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Client_Socket {
+public class Client_Socket extends ChessBoardWithColumnsAndRows {
     static Socket s;
     static String username ;
 
@@ -14,14 +14,7 @@ public class Client_Socket {
         WRT.flush();
         String server_user = BFRD.readLine();
         System.out.println(server_user);
-        try {
 
-            while(true) {
-            }
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
     }
     public static void setName(String name){
         username = name;

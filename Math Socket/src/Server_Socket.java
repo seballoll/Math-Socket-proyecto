@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Server_Socket {
+public class Server_Socket extends ChessBoardWithColumnsAndRows {
 
     static ServerSocket ss;
     static Socket s ;
@@ -24,14 +24,7 @@ public class Server_Socket {
         WRT.println(host_user);
         WRT.flush();
 
-        try {
 
-            while(true) {
-            }
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
 
 
     }

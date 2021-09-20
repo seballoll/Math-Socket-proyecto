@@ -88,28 +88,30 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     }
     public void actionPerformed(ActionEvent event){
         if ("start_server".equals(event.getActionCommand())){
-            username = username_text.getText();
-            System.out.println(username);
-            //Server_Socket server = new Server_Socket();
-            //server.setName(username);
-            //try {
-            //    server.main();
-            //} catch (IOException e) {
-            //    e.printStackTrace();
-            //}
             gui_board.removeAll();
             initializeGui();
+            username = username_text.getText();
+            System.out.println(username);
+
+            Server_Socket server = new Server_Socket();
+            server.setName(username);
+            try {
+                server.main();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         }else if ("start_client".equals(event.getActionCommand())){
             username = username_text.getText();
             System.out.println(username);
-            //Client_Socket client = new Client_Socket();
-            //client.setName(username);
-            //try {
-            //    client.main();
-            //} catch (IOException e) {
-            //    e.printStackTrace();
-            //}
+            Client_Socket client = new Client_Socket();
+            client.setName(username);
+            try {
+                client.main();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             gui_board.removeAll();
             initializeGui();
         }else if("roll_dice".equals(event.getActionCommand())){
