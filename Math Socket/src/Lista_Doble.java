@@ -1,4 +1,6 @@
-public class Lista_Doble {
+import java.io.Serializable;
+
+public class Lista_Doble implements Serializable {
         Nodo head = new Nodo();
 
         Nodo tail = new Nodo();

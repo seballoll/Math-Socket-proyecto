@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class random_list{
+public class random_list implements Serializable{
             Lista_Doble lista = null;
 
             public static Lista_Doble setLista(){

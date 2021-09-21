@@ -31,5 +31,11 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
     public static void setName(String name){
         host_user = name;
     }
+    public static void Send_Board(random_list Casillas) throws IOException, ClassNotFoundException { System.out.println(Casillas);
+        ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
+        OOSTR.writeObject(Casillas);
+        OOSTR.flush();
+
+    }
     }
 

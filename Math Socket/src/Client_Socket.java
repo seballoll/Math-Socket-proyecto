@@ -4,6 +4,7 @@ import java.net.*;
 public class Client_Socket extends ChessBoardWithColumnsAndRows {
     static Socket s;
     static String username ;
+    public random_list Server_Board;
 
     public static void main() throws IOException {
         s = new Socket("LocalHost", 4545);
@@ -18,6 +19,12 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows {
     }
     public static void setName(String name){
         username = name;
+    }
+    public static void Receive_Board() throws IOException, ClassNotFoundException {
+        ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
+        random_list casillas = (random_list) OIRD.readObject();
+        System.out.println(casillas);
+        ChessBoardWithColumnsAndRows.setCasillas(casillas);
     }
 
 
