@@ -102,10 +102,10 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 }
 
             }
-            
+
         }catch(Exception e){
             e.printStackTrace();
-            System.exit(2);
+            System.exit(1);
 
     }
         }
