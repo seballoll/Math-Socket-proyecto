@@ -75,7 +75,9 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
-
+    public static void setCasillas(random_list board){
+        casillas = board;
+    }
 
 
     public final void start_screen(){
