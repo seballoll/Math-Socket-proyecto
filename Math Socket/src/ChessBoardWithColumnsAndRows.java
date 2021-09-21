@@ -102,12 +102,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 }
 
             }
-            for (int ii=0; ii<2; ii++){
-                for (int jj=0; jj<3; jj++){
-                    chessPieceImages[ii][jj]=bi.getSubimage(jj*10,ii*0,10,120);}
-
-        }
-
+            
         }catch(Exception e){
             e.printStackTrace();
             System.exit(2);
