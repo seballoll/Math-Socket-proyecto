@@ -16,7 +16,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     private final JLabel message = new JLabel(
             "Chess Champ is ready to play!");
     public JTextField username_text = new JTextField();
-    public static random_list casillas;
+    public static random_list casillas = new random_list();
     public boolean is_client = false;
     private Image[][] chessPieceImages = new Image[2][3];
     public static final int seen = 0, KING = 1,
@@ -26,7 +26,16 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     };
     public static final int BLACK = 0, WHITE = 1;
 
+    public void create_casillas(){
+        if (is_client) {
+            ;
 
+        } else {
+            random_list new_board = new random_list();
+            casillas.lista = new_board.setLista();
+
+        }
+    }
 
     ChessBoardWithColumnsAndRows() {
         start_screen();
@@ -42,8 +51,10 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         chessBoard = new JPanel(new GridLayout(4, 4));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
         gui_board.add(chessBoard);
-        random_list Lista_De_Cuadros = new random_list();
-        Nodo current = Lista_De_Cuadros.setLista().head;
+        create_casillas();
+        System.out.println(casillas.lista);
+        casillas.printList(casillas.lista);
+        Nodo current = casillas.lista.head;
 
         // create the chess board squares
         Insets buttonMargin = new Insets(100,50,0,23);//manage size
@@ -75,8 +86,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
-    public static void setCasillas(random_list board){
-        casillas = board;
+    public static void setCasillas(Lista_Doble board){
+        casillas.lista = board;
     }
 
 
@@ -105,11 +116,11 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     }
     public void actionPerformed(ActionEvent event){
         if ("start_server".equals(event.getActionCommand())){
-            gui_board.removeAll();
-            initializeGui();
+
             username = username_text.getText();
             System.out.println(username);
-
+            gui_board.removeAll();
+            initializeGui();
             Server_Socket server = new Server_Socket();
             server.setName(username);
             try {
@@ -117,9 +128,17 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            try {
+                server.Send_Board(casillas.lista);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
 
         }else if ("start_client".equals(event.getActionCommand())){
+            is_client = true;
             username = username_text.getText();
             System.out.println(username);
             Client_Socket client = new Client_Socket();
@@ -127,6 +146,13 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             try {
                 client.main();
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                client.Receive_Board();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             gui_board.removeAll();

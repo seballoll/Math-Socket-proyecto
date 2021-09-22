@@ -22,7 +22,8 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows {
     }
     public static void Receive_Board() throws IOException, ClassNotFoundException {
         ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
-        random_list casillas = (random_list) OIRD.readObject();
+        Lista_Doble casillas = (Lista_Doble) OIRD.readObject();
+        OIRD.close();
         System.out.println(casillas);
         ChessBoardWithColumnsAndRows.setCasillas(casillas);
     }
