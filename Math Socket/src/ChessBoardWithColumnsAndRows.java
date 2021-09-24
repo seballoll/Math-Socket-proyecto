@@ -6,6 +6,9 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.*;
 
+/**
+ * Interfaz principal
+ */
 public class ChessBoardWithColumnsAndRows implements ActionListener {
 
     public String username;
@@ -26,6 +29,9 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     };
     public static final int BLACK = 0, WHITE = 1;
 
+    /**
+     * metodo para crear las casillas
+     */
     public void create_casillas(){
         if (is_client) {
             ;
@@ -37,11 +43,15 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
+
     ChessBoardWithColumnsAndRows() {
         start_screen();
         //initializeGui();
     }
 
+    /**
+     * inicia el tablero de juego
+     */
     public final void initializeGui() {
         // set up the main GUI
         gui_board.setBorder(new EmptyBorder(20, 0, 5, 5));
@@ -86,11 +96,17 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
+    /**
+     * metodo para poner las casillas de juego
+     * @param board Lista_Doble con las casillas definidas
+     */
     public static void setCasillas(Lista_Doble board){
         casillas.lista = board;
     }
 
-
+    /**
+     * inicia la pantalla de inicio
+     */
     public final void start_screen(){
 
         GridLayout layout = new GridLayout(10,10);
@@ -114,6 +130,11 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
 
     }
+
+    /**
+     * metodo para darle funcionamiento a los botones
+     * @param event String con accion
+     */
     public void actionPerformed(ActionEvent event){
         if ("start_server".equals(event.getActionCommand())){
 
@@ -172,6 +193,10 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         return gui_board;
     }
 
+    /**
+     * corre de la interfaz grafica
+     * @param args
+     */
     public static void main(String[] args) {
         Runnable r = new Runnable() {
 

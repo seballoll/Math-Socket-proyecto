@@ -4,7 +4,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class random_list implements Serializable{
             Lista_Doble lista = null;
 
-            public static Lista_Doble setLista(){
+    /**
+     * genera una lista aleatoria con las casillas de juego
+     * @return lista aleatoria con las casillas de juego
+     */
+    public static Lista_Doble setLista(){
 
                     Lista_Doble lista = new Lista_Doble();
                     int Reto = 7;
@@ -44,10 +48,13 @@ public class random_list implements Serializable{
                         }        
 
                     return lista;
-            }   
-            
+            }
 
-            public static void printList(Lista_Doble list){
+    /**
+     * imprime la lista dada
+     * @param list Lista_Doble a imprimir
+     */
+    public static void printList(Lista_Doble list){
 
                 Nodo current = list.head;
                 int i = 1;
