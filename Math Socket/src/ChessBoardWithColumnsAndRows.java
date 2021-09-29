@@ -2,10 +2,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -43,29 +41,25 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
     ChessBoardWithColumnsAndRows() {
         start_screen();
+
         //initializeGui();
     }
 
-    public final void initializeGui() {
+    public  void initializeGui() {
+
         // set up the main GUI
-        createimage();
+
+
         gui_board.setBorder(new EmptyBorder(20, 0, 5, 5));
         JToolBar tools = new JToolBar();
         gui_board.setLayout(new BorderLayout());
         gui_board.add(tools, BorderLayout.PAGE_START);
-        Action newGameAction = new AbstractAction("Nuevo Juego") {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setupNewGame();
-            }
-        };
-        tools.add(newGameAction);
 
         Action nuevaAccionJuego= new AbstractAction("Lanzar dado") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dice.throw_dice();
+               movement(dice.throw_dice()) ;
 
             }
         };
@@ -113,11 +107,13 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 }
             }
         }
+        createimage();//calls void for charging images
+        setupNewGame();//set images on board
     }
 
 
 
-    private final void createimage(){
+    private void createimage(){
         try{
             URL url= new URL("https://2.bp.blogspot.com/-fOKnfX3wl_4/WfEkY9coU3I/AAAAAAAAA6Q/O1huB_NomcgBt9XdMnJ3nj_lgv7_5ja7ACLcBGAs/s320/color%2Brojo.jpg");
             URL te=new URL("https://biblioteca.acropolis.org/wp-content/uploads/2014/12/azul.png");
@@ -138,12 +134,14 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
                     }
                 }
+
         }catch(Exception e){
             e.printStackTrace();
             System.exit(1);
 
         }
     }
+
 
 
     public static void setCasillas(Lista_Doble board){
@@ -168,6 +166,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         start_client.addActionListener(this);
         gui_board.add(start_server);
         gui_board.add(start_client);
+
 
 
 
@@ -232,9 +231,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         return gui_board;
     }
 
-    private final void setupNewGame() {
-        message.setText("Make your move!");
-        // set up the black pieces
+    private void setupNewGame() {
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             ImageIcon hi=new ImageIcon(chessPieceImages[1]);
             chessBoardSquares[ii][0].setIcon(hi);
@@ -245,9 +242,27 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             chessBoardSquares[ii][0].add(label);
 
         }
+        // set up the black pieces
+
 
 
     }
+
+    public final void movement(int pasos) {
+        if (is_client) {
+            JLabel label = new JLabel(new ImageIcon(chessPieceImages[2]));
+            chessBoardSquares[pasos][0].add(label);
+            chessBoard.validate();
+            chessBoard.repaint();
+        } else {
+            ImageIcon hi = new ImageIcon(chessPieceImages[1]);
+            chessBoardSquares[pasos][0].setIcon(hi);
+        }
+        chessBoard.validate();
+        chessBoard.repaint();
+    }
+
+
 
 
 
@@ -258,6 +273,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
             public void run() {
 
+
+
                 ChessBoardWithColumnsAndRows cb =
                         new ChessBoardWithColumnsAndRows();
 
@@ -267,6 +284,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 f.setLocationByPlatform(true);
 
 
+
                 
                 f.pack();
                 // ensures the minimum size is enforced.
@@ -274,9 +292,11 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
                 f.setResizable(false);
+
             }
         };
         SwingUtilities.invokeLater(r);
+
     }
 }
 
