@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class Nodo implements Serializable {

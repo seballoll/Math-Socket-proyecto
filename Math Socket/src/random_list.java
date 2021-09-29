@@ -4,11 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class random_list implements Serializable{
             Lista_Doble lista = null;
 
-    /**
-     * genera una lista aleatoria con las casillas de juego
-     * @return lista aleatoria con las casillas de juego
-     */
-    public static Lista_Doble setLista(){
+            public static Lista_Doble setLista(){
 
                     Lista_Doble lista = new Lista_Doble();
                     int Reto = 7;
@@ -17,26 +13,26 @@ public class random_list implements Serializable{
                     int currentReto = 0;
                     int currentTunel = 0;
                     int currentTrampa = 0;
-                    
+
 
                     for (int i = 0; i < 16; i++){
                         int randomNum = ThreadLocalRandom.current().nextInt(0,11);
-                        Nodo newNodo = new Nodo();        
+                        Nodo newNodo = new Nodo();
                         if(i == 0){
                                 newNodo.tipo = "Inicio";
                                 lista.set_Head(newNodo);
                                 lista.set_Tail(newNodo);
                         }else if(i == 15){
                                 newNodo.tipo = "Final";
-                         
+
                         }else if (randomNum % 2 == 0 && currentReto < Reto){
-                                newNodo.tipo = "Reto";         
-                                currentReto++;                       
-                        
+                                newNodo.tipo = "Reto";
+                                currentReto++;
+
                         }else if((randomNum >5 && currentTrampa < Trampa) || currentTunel >= Tunel){
                                 newNodo.tipo = "Trampa";
                                 currentTrampa++;
-                               
+
                         }else{
                                 newNodo.tipo = "Tunel";
                                 currentTunel++;
@@ -44,17 +40,14 @@ public class random_list implements Serializable{
                         }
                         newNodo.prev = lista.tail;
                         lista.tail.next = newNodo;
-                        lista.set_Tail(newNodo);                               
-                        }        
+                        lista.set_Tail(newNodo);
+                        }
 
                     return lista;
             }
 
-    /**
-     * imprime la lista dada
-     * @param list Lista_Doble a imprimir
-     */
-    public static void printList(Lista_Doble list){
+
+            public static void printList(Lista_Doble list){
 
                 Nodo current = list.head;
                 int i = 1;

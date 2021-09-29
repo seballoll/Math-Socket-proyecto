@@ -7,10 +7,6 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
     static Socket s ;
     static String host_user;
 
-    /**
-     * metodo para inicar el servidor (espera hasta que un cliente se conecte)
-     * @throws IOException
-     */
     public static void main() throws IOException {
 
         //declaraciones para la coneccion del servidor y el cliente
@@ -35,13 +31,6 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
     public static void setName(String name){
         host_user = name;
     }
-
-    /**
-     * metodo para enviar el tablero al cliente
-     * @param Casillas Lista_doble con el tablero de juego
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
     public static void Send_Board(Lista_Doble Casillas) throws IOException, ClassNotFoundException { System.out.println(Casillas);
         ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
         OOSTR.writeUnshared(Casillas);

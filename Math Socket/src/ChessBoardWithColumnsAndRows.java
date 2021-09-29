@@ -1,14 +1,15 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 
-/**
- * Interfaz principal
- */
 public class ChessBoardWithColumnsAndRows implements ActionListener {
 
     public String username;
@@ -17,21 +18,18 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     private JButton[][] chessBoardSquares = new JButton[10][10];
     private JPanel chessBoard;
     private final JLabel message = new JLabel(
-            "Chess Champ is ready to play!");
+            "Welcome");
     public JTextField username_text = new JTextField();
     public static random_list casillas = new random_list();
     public boolean is_client = false;
-    private Image[][] chessPieceImages = new Image[2][3];
-    public static final int seen = 0, KING = 1,
-            RuOK = 2, KNIGHT = 3, BIOP = 4, PAN = 5;
+    public static final int KING = 1;
     public static final int[] STARTING_ROW = {
              KING
     };
-    public static final int BLACK = 0, WHITE = 1;
+    private Image[] chessPieceImages = new Image[4];
 
-    /**
-     * metodo para crear las casillas
-     */
+
+
     public void create_casillas(){
         if (is_client) {
             ;
@@ -43,19 +41,36 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
-
     ChessBoardWithColumnsAndRows() {
         start_screen();
         //initializeGui();
     }
 
-    /**
-     * inicia el tablero de juego
-     */
     public final void initializeGui() {
         // set up the main GUI
+        createimage();
         gui_board.setBorder(new EmptyBorder(20, 0, 5, 5));
+        JToolBar tools = new JToolBar();
         gui_board.setLayout(new BorderLayout());
+        gui_board.add(tools, BorderLayout.PAGE_START);
+        Action newGameAction = new AbstractAction("Nuevo Juego") {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setupNewGame();
+            }
+        };
+        tools.add(newGameAction);
+
+        Action nuevaAccionJuego= new AbstractAction("Lanzar dado") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dice.throw_dice();
+
+            }
+        };
+        tools.add(nuevaAccionJuego);
+
 
 
         chessBoard = new JPanel(new GridLayout(4, 4));
@@ -66,15 +81,18 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         casillas.printList(casillas.lista);
         Nodo current = casillas.lista.head;
 
+
         // create the chess board squares
-        Insets buttonMargin = new Insets(100,50,0,23);//manage size
+        Insets buttonMargi = new Insets(0,0,100,23);//manage size
         for (int ii = 0; ii < 4; ii++) {
             for (int jj = 0; jj < 4; jj++) {
                 JButton b = new JButton(current.tipo);
-                b.setMargin(buttonMargin);
+                b.setMargin(buttonMargi);
 
 
                     b.setBackground(Color.WHITE);
+
+
 
                 chessBoardSquares[jj][ii] = b;
 
@@ -83,6 +101,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             }
 
         }
+
 
 
         // fill the black non-pawn piece row
@@ -96,17 +115,42 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         }
     }
 
-    /**
-     * metodo para poner las casillas de juego
-     * @param board Lista_Doble con las casillas definidas
-     */
+
+
+    private final void createimage(){
+        try{
+            URL url= new URL("https://2.bp.blogspot.com/-fOKnfX3wl_4/WfEkY9coU3I/AAAAAAAAA6Q/O1huB_NomcgBt9XdMnJ3nj_lgv7_5ja7ACLcBGAs/s320/color%2Brojo.jpg");
+            URL te=new URL("https://biblioteca.acropolis.org/wp-content/uploads/2014/12/azul.png");
+
+            BufferedImage bi= ImageIO.read(url);
+            BufferedImage be= ImageIO.read(te);
+
+
+            for (int ii=0; ii<4; ii++){
+                if (ii==1)
+                    chessPieceImages[ii]=bi.getSubimage(230,0,20,20);
+                else{
+                    if(ii==2){
+                        chessPieceImages[ii]=be.getSubimage(230,0,20,90);
+
+                    }
+
+
+                    }
+                }
+        }catch(Exception e){
+            e.printStackTrace();
+            System.exit(1);
+
+        }
+    }
+
+
     public static void setCasillas(Lista_Doble board){
         casillas.lista = board;
     }
 
-    /**
-     * inicia la pantalla de inicio
-     */
+
     public final void start_screen(){
 
         GridLayout layout = new GridLayout(10,10);
@@ -130,11 +174,6 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
 
     }
-
-    /**
-     * metodo para darle funcionamiento a los botones
-     * @param event String con accion
-     */
     public void actionPerformed(ActionEvent event){
         if ("start_server".equals(event.getActionCommand())){
 
@@ -193,15 +232,32 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         return gui_board;
     }
 
-    /**
-     * corre de la interfaz grafica
-     * @param args
-     */
+    private final void setupNewGame() {
+        message.setText("Make your move!");
+        // set up the black pieces
+        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
+            ImageIcon hi=new ImageIcon(chessPieceImages[1]);
+            chessBoardSquares[ii][0].setIcon(hi);
+
+            JLabel label=new JLabel((new ImageIcon(chessPieceImages[2])));
+            //label.setSize(90,100);
+            //label.setVisible(true);
+            chessBoardSquares[ii][0].add(label);
+
+        }
+
+
+    }
+
+
+
+
     public static void main(String[] args) {
         Runnable r = new Runnable() {
 
 
             public void run() {
+
                 ChessBoardWithColumnsAndRows cb =
                         new ChessBoardWithColumnsAndRows();
 
@@ -217,6 +273,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 f.setSize(600,600);
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
+                f.setResizable(false);
             }
         };
         SwingUtilities.invokeLater(r);
