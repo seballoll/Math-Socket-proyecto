@@ -1,10 +1,17 @@
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * lista aleatoria para generar el tablero
+ */
 public class random_list implements Serializable{
             Lista_Doble lista = null;
 
-            public static Lista_Doble setLista(){
+    /**
+     * crea la lista aleatoria
+     * @return lista doble aleatoria
+     */
+    public static Lista_Doble setLista(){
 
                     Lista_Doble lista = new Lista_Doble();
                     int Reto = 7;
@@ -46,8 +53,11 @@ public class random_list implements Serializable{
                     return lista;
             }
 
-
-            public static void printList(Lista_Doble list){
+    /**
+     * imprime la lista actual
+     * @param list lista a imprimir
+     */
+    public static void printList(Lista_Doble list){
 
                 Nodo current = list.head;
                 int i = 1;

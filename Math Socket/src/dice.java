@@ -1,9 +1,15 @@
 import java.util.Random;
+
 public class dice {
+    /**
+     * genera un numero aleatorio
+     * @return numero aleatorio
+     */
     public static int throw_dice(){
         Random num = new Random();
-        System.out.println(num.nextInt(5));
-        return num.nextInt(5);
+        int ranum = num.nextInt(5);
+        System.out.println(ranum);
+        return ranum;
 
     }
 
