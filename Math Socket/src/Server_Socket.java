@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 
-public class Server_Socket extends ChessBoardWithColumnsAndRows {
+public class Server_Socket extends ChessBoardWithColumnsAndRows implements Serializable {
 
     static ServerSocket ss;
     static Socket s ;
@@ -20,7 +20,7 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
         ss = new ServerSocket(port_num);
         System.out.println("server online");//notifica al activar el socket del servidor
         s = ss.accept();
-        System.out.println(s);
+        System.out.println(ss);
         System.out.println("client conected");//notifica cuando un cliente se conecta
         InputStreamReader RD = new InputStreamReader(s.getInputStream());
         BufferedReader BFRD = new BufferedReader(RD);
@@ -44,15 +44,20 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
     public static void Send_Board(Lista_Doble Casillas) throws IOException, ClassNotFoundException { System.out.println(Casillas);
         ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
         OOSTR.writeUnshared(Casillas);
-
-
-
     }
+
+
     public static void Send_ser_pos(int[] server_pos) throws IOException {
         ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
         OOSTR.writeUnshared(server_pos);
 
-
+    }
+    public static void Receive_client_pos() throws IOException, ClassNotFoundException {
+        int[] client_pos;
+        ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
+        client_pos = (int[]) OIRD.readObject();
+        ChessBoardWithColumnsAndRows.setClient_pos(client_pos);
+        ChessBoardWithColumnsAndRows.movement();
     }
     }
 

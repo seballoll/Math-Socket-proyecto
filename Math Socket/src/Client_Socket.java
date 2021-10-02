@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Client_Socket extends ChessBoardWithColumnsAndRows {
+public class Client_Socket extends ChessBoardWithColumnsAndRows implements Serializable {
     static Socket s;
     static String username ;
 
@@ -36,18 +36,21 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows {
         Lista_Doble casillas;
         ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream()) ;
             casillas = (Lista_Doble) OIRD.readObject();
-
-
         System.out.println(casillas);
         ChessBoardWithColumnsAndRows.setCasillas(casillas);
     }
+
     public static void Receive_ser_pos() throws IOException, ClassNotFoundException {
         int[] ser_pos;
         ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
         ser_pos = (int[]) OIRD.readObject();
         ChessBoardWithColumnsAndRows.setServer_pos(ser_pos);
-        ChessBoardWithColumnsAndRows.movement();
-    }
 
+    }
+    public static void Send_client_pos(int[] client_pos) throws IOException {
+        ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
+        OOSTR.writeUnshared(client_pos);
+
+    }
 
 }
