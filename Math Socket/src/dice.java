@@ -8,7 +8,6 @@ public class dice {
     public static int throw_dice(){
         Random num = new Random();
         int ranum = num.nextInt(5);
-        System.out.println(ranum);
         return ranum;
 
     }

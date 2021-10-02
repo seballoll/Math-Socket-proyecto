@@ -36,12 +36,18 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows {
         Lista_Doble casillas;
         ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream()) ;
             casillas = (Lista_Doble) OIRD.readObject();
-            OIRD.close();
+
 
         System.out.println(casillas);
         ChessBoardWithColumnsAndRows.setCasillas(casillas);
     }
-
+    public static void Receive_ser_pos() throws IOException, ClassNotFoundException {
+        int[] ser_pos;
+        ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
+        ser_pos = (int[]) OIRD.readObject();
+        ChessBoardWithColumnsAndRows.setServer_pos(ser_pos);
+        ChessBoardWithColumnsAndRows.movement();
+    }
 
 
 }

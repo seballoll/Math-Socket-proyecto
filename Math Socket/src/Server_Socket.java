@@ -20,6 +20,7 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
         ss = new ServerSocket(port_num);
         System.out.println("server online");//notifica al activar el socket del servidor
         s = ss.accept();
+        System.out.println(s);
         System.out.println("client conected");//notifica cuando un cliente se conecta
         InputStreamReader RD = new InputStreamReader(s.getInputStream());
         BufferedReader BFRD = new BufferedReader(RD);
@@ -28,9 +29,6 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
         System.out.println(client_user);
         WRT.println(host_user);
         WRT.flush();
-
-
-
 
     }
     public static void setName(String name){
@@ -46,7 +44,13 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows {
     public static void Send_Board(Lista_Doble Casillas) throws IOException, ClassNotFoundException { System.out.println(Casillas);
         ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
         OOSTR.writeUnshared(Casillas);
-        OOSTR.close();
+
+
+
+    }
+    public static void Send_ser_pos(int[] server_pos) throws IOException {
+        ObjectOutputStream OOSTR = new ObjectOutputStream(s.getOutputStream());
+        OOSTR.writeUnshared(server_pos);
 
 
     }

@@ -14,18 +14,20 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     private final JPanel gui_board = new JPanel();
     public static int server_pos[];
     public static int client_pos[];
-    private JButton[][] chessBoardSquares = new JButton[10][10];
-    private JPanel chessBoard;
+    public static Server_Socket server;
+    public static Client_Socket client;
+    private static JButton[][] chessBoardSquares = new JButton[10][10];
+    private static JPanel chessBoard;
     private final JLabel message = new JLabel(
             "Welcome");
     public JTextField username_text = new JTextField();
     public static random_list casillas = new random_list();
-    public boolean is_client = false;
+    public static boolean is_client = false;
     public static final int KING = 1;
     public static final int[] STARTING_ROW = {
              KING
     };
-    private Image[] chessPieceImages = new Image[4];
+    private static Image[] chessPieceImages = new Image[4];
 
 
     /**
@@ -60,11 +62,20 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (is_client){
-                    set_client_pos(dice.throw_dice());
+                    int num = dice.throw_dice();
+                    set_client_pos(num);
                     movement();
                 }else {
-                    set_server_pos(dice.throw_dice());
-                    movement();
+                    int num = dice.throw_dice();
+                    set_server_pos(num);
+                    try {
+                        server.Send_ser_pos(server_pos);
+                        movement();
+
+                    } catch (IOException  ioException) {
+                        ioException.printStackTrace();
+                    }
+
                 }
             }
         };
@@ -147,6 +158,13 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
         }
     }
+    public static void setServer_pos(int[] server_pos) {
+        ChessBoardWithColumnsAndRows.server_pos = server_pos;
+    }
+
+    public static void setClient_pos(int[] client_pos) {
+        ChessBoardWithColumnsAndRows.client_pos = client_pos;
+    }
 
     /**
      * determina el tablero
@@ -194,7 +212,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             System.out.println(username);
             gui_board.removeAll();
             initializeGui();
-            Server_Socket server = new Server_Socket();
+            server = new Server_Socket();
             server.setName(username);
             try {
                 server.main();
@@ -212,7 +230,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             is_client = true;
             username = username_text.getText();
             System.out.println(username);
-            Client_Socket client = new Client_Socket();
+            client = new Client_Socket();
             client.setName(username);
             try {
                 client.main();
@@ -228,9 +246,6 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             }
             gui_board.removeAll();
             initializeGui();
-        }else if("roll_dice".equals(event.getActionCommand())){
-            dice num = new dice();
-            num.throw_dice();
         }
     }
 
@@ -270,7 +285,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     /**
      * metodo para mover el jugador a traves del tablero
      */
-    public final void movement() {
+    public static final void movement() {
         if (is_client) {
             JLabel label = new JLabel(new ImageIcon(chessPieceImages[2]));
             chessBoardSquares[client_pos[0]][client_pos[1]].add(label);
@@ -289,6 +304,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
      * @param pos numero de movimientos en casilla
      */
     public static void set_server_pos(int pos){
+        chessBoardSquares[server_pos[0]][server_pos[1]].setIcon(null);
         server_pos[2] += pos;
         server_pos[0] += pos;
         System.out.println(server_pos[0]);
@@ -305,6 +321,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
      * @param pos numero de movimientos en casilla
      */
     public static void set_client_pos(int pos){
+        Component[] label = chessBoardSquares[client_pos[0]][client_pos[1]].getComponents();
+        chessBoardSquares[client_pos[0]][client_pos[1]].remove(label[0]);
         client_pos[2] += pos;
         client_pos[0] += pos;
         if (client_pos[0]>3){
