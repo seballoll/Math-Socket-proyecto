@@ -59,5 +59,9 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows implements Seria
         ChessBoardWithColumnsAndRows.setClient_pos(client_pos);
 
     }
+    public static void setHost_user(){
+        ChessBoardWithColumnsAndRows.setOther_username(host_user);
     }
+    }
+
 

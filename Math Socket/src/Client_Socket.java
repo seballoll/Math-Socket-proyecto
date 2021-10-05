@@ -17,6 +17,7 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows implements Seria
         WRT.println(username);
         WRT.flush();
         String server_user = BFRD.readLine();
+        ChessBoardWithColumnsAndRows.setOther_username(server_user);
         System.out.println(server_user);
 
     }
@@ -52,5 +53,6 @@ public class Client_Socket extends ChessBoardWithColumnsAndRows implements Seria
         OOSTR.writeUnshared(client_pos);
 
     }
+
 
 }

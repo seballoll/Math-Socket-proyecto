@@ -7,19 +7,21 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.text.TextAction;
 
 public class ChessBoardWithColumnsAndRows implements ActionListener {
 
-    public String username;
-    private final JPanel gui_board = new JPanel();
+
+    public static String username;
+    public static String other_username;
+    public  JPanel gui_board = new JPanel();
+    public static JFrame endgame;
     public static int server_pos[];
     public static int client_pos[];
     public static Server_Socket server;
     public static Client_Socket client;
     private static JButton[][] chessBoardSquares = new JButton[10][10];
     private static JPanel chessBoard;
-    private final JLabel message = new JLabel(
-            "Welcome");
     public JTextField username_text = new JTextField();
     public static random_list casillas = new random_list();
     public static boolean is_client = false;
@@ -28,6 +30,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
              KING
     };
     private static Image[] chessPieceImages = new Image[4];
+
+    private String ganador = "Server";
 
 
     /**
@@ -64,22 +68,14 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 if (is_client) {
                     int num = dice.throw_dice();
                     set_client_pos(num);
-                    try {
-                        client.Send_client_pos(client_pos);
                         movement();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+
                 } else {
                     int num = dice.throw_dice();
                     set_server_pos(num);
-                    try {
-                        server.Send_ser_pos(server_pos);
                         movement();
 
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+
 
                 }
             }
@@ -113,9 +109,60 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
             }
         };
+        Action CasillaEspecial = new AbstractAction("Accion Especial") {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Casilla_especial Caida = new Casilla_especial();
+                int posicion = Caida.posicion_especial(Caida.Tipo());
+                System.out.println(Caida.Tipo());
+                if (is_client) {
 
+                    set_client_pos(posicion);
+                    try {
+                        client.Send_client_pos(client_pos);
+                        movement();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                } else {
+
+                    set_server_pos(posicion);
+                    try {
+                        server.Send_ser_pos(server_pos);
+                        movement();
+
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
+                }
+            }
+        };
+        Action finalizar = new AbstractAction("finalizar") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pantalla_final(ganador);
+            }
+        };
+        Action user_name = new TextAction(username) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+        Action other_name = new TextAction(other_username) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+        //finalizar.setEnabled(false);
         tools.add(nuevaAccionJuego);
         tools.add(AcualizarSocket);
+        tools.add(CasillaEspecial);
+        tools.add(user_name);
+        tools.add(other_name);
+        tools.add(finalizar);
 
 
 
@@ -163,6 +210,35 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         setupNewGame();//set images on board
     }
 
+    public static void pantalla_final(String ganador){
+        endgame = new JFrame("final");
+        endgame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        endgame.setSize(300, 300);
+        JPanel panel = new JPanel();
+        if(ganador.equals("Server")){
+            if(is_client){
+                JLabel winner = new JLabel("El ganador es: "+other_username);
+                panel.add(winner);
+            }else {
+                JLabel winner = new JLabel("El ganador es: "+username);
+                panel.add(winner);
+            }
+        }else {
+            if(is_client){
+                JLabel winner = new JLabel("El ganador es: "+username);
+                panel.add(winner);
+            }else {
+                JLabel winner = new JLabel("El ganador es: "+other_username);
+                panel.add(winner);
+            }
+        }
+        panel.setSize(300,300);
+        panel.setBackground(Color.green);
+        endgame.add(panel);
+        endgame.setVisible(true);
+
+
+    }
 
     /**
      * carga las imagenes de los jugadores y las carga en una lista (chess piece image).
@@ -194,6 +270,10 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
         }
     }
+    public static void setOther_username(String namae) {
+        other_username = namae;
+    }
+
     public static void setServer_pos(int[] server_pos) {
         ChessBoardWithColumnsAndRows.server_pos = server_pos;
     }
@@ -201,7 +281,6 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     public static void setClient_pos(int[] client_pos) {
         ChessBoardWithColumnsAndRows.client_pos = client_pos;
     }
-
 
     /**
      * determina el tablero
@@ -253,11 +332,14 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             server.setName(username);
             try {
                 server.main();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
+                server.setHost_user();
                 server.Send_Board(casillas.lista);
+
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -317,6 +399,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
     }
 
+
+
     /**
      * metodo para mover el jugador a traves del tablero
      */
@@ -340,11 +424,12 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
                 if (label.length!= 0){
                     chessBoardSquares[j][i].remove(label[0]);
                 }
+                chessBoard.validate();
+                chessBoard.repaint();
 
             }
         }
-        chessBoard.validate();
-        chessBoard.repaint();
+
 
     }
 
@@ -357,6 +442,16 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         server_pos[2] += pos;
         server_pos[0] += pos;
         System.out.println(server_pos[0]);
+        if(server_pos[2] > 16){
+            server_pos[2] = 16;
+        }
+        if(server_pos[0]< 0){
+            server_pos[0] = 0;
+        }
+        if(server_pos[0]>=3 && server_pos[1] >= 3 ){
+            server_pos[0] = 3;
+            server_pos[1] = 3;
+        }
         if (server_pos[0]>3){
             int temp = server_pos[0]-4;
             server_pos[0] = temp;
@@ -374,6 +469,16 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         chessBoardSquares[client_pos[0]][client_pos[1]].remove(label[0]);
         client_pos[2] += pos;
         client_pos[0] += pos;
+        if(client_pos[2] > 16){
+            client_pos[2] = 16;
+        }
+        if(client_pos[0]< 0){
+            client_pos[0] = 0;
+        }
+        if(client_pos[0]>=3 && client_pos[1] >= 3 ){
+            client_pos[0] = 3;
+            client_pos[1] = 3;
+        }
         if (client_pos[0]>3){
             int temp = client_pos[0]-4;
             client_pos[0] = temp;
