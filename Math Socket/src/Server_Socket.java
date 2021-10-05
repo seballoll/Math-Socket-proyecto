@@ -57,7 +57,7 @@ public class Server_Socket extends ChessBoardWithColumnsAndRows implements Seria
         ObjectInputStream OIRD = new ObjectInputStream(s.getInputStream());
         client_pos = (int[]) OIRD.readObject();
         ChessBoardWithColumnsAndRows.setClient_pos(client_pos);
-        ChessBoardWithColumnsAndRows.movement();
+
     }
     }
 

@@ -89,9 +89,8 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (is_client) {
                     try {
+                        wipe();
                         client.Receive_ser_pos();
-                        System.out.println(server_pos[0]);
-                        System.out.println(server_pos[1]);
                         movement();
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
@@ -101,6 +100,7 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
                 }else{
                     try {
+                        wipe();
                         server.Receive_client_pos();
                         movement();
                     } catch (IOException ioException) {
@@ -202,13 +202,6 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
         ChessBoardWithColumnsAndRows.client_pos = client_pos;
     }
 
-    public static void setServer(Server_Socket server) {
-        ChessBoardWithColumnsAndRows.server = server;
-    }
-
-    public static void setClient(Client_Socket client) {
-        ChessBoardWithColumnsAndRows.client = client;
-    }
 
     /**
      * determina el tablero
@@ -322,9 +315,6 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
             JLabel label=new JLabel((new ImageIcon(chessPieceImages[2])));
             chessBoardSquares[client_pos[0]][client_pos[1]].add(label);
 
-
-
-
     }
 
     /**
@@ -341,6 +331,22 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
 
 
     }
+    public static void wipe(){
+
+        for(int i = 0; i<3;i++){
+            for(int j = 0; j<3 ; j++){
+                chessBoardSquares[j][i].setIcon(null);
+                Component[] label = chessBoardSquares[j][i].getComponents();
+                if (label.length!= 0){
+                    chessBoardSquares[j][i].remove(label[0]);
+                }
+
+            }
+        }
+        chessBoard.validate();
+        chessBoard.repaint();
+
+    }
 
     /**
      * determina la posicion actual del servidor.
@@ -348,13 +354,11 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
      */
     public static void set_server_pos(int pos){
         chessBoardSquares[server_pos[0]][server_pos[1]].setIcon(null);
-        Component[] label = chessBoardSquares[client_pos[0]][client_pos[1]].getComponents();
-        chessBoardSquares[client_pos[0]][client_pos[1]].remove(label[0]);
         server_pos[2] += pos;
         server_pos[0] += pos;
         System.out.println(server_pos[0]);
         if (server_pos[0]>3){
-            int temp = server_pos[0]-3;
+            int temp = server_pos[0]-4;
             server_pos[0] = temp;
             server_pos[1] += 1;
 
@@ -368,11 +372,10 @@ public class ChessBoardWithColumnsAndRows implements ActionListener {
     public static void set_client_pos(int pos){
         Component[] label = chessBoardSquares[client_pos[0]][client_pos[1]].getComponents();
         chessBoardSquares[client_pos[0]][client_pos[1]].remove(label[0]);
-        chessBoardSquares[server_pos[0]][server_pos[1]].setIcon(null);
         client_pos[2] += pos;
         client_pos[0] += pos;
         if (client_pos[0]>3){
-            int temp = client_pos[0]-3;
+            int temp = client_pos[0]-4;
             client_pos[0] = temp;
             client_pos[1] += 1;
         }
